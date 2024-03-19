@@ -1,0 +1,24 @@
+events - onClick, onBlur etc. (camel case)
+
+
+functional component ->
+hooks (functions) -> 1. built in
+                    2. custom
+useState()
+useRef()
+useEffect()
+useContext()
+useMemo()
+useCallback()
+useParams() 
+useNavigate()
+etc.
+
+
+counter app -> count = 0
+                4 buttons 
+                increase by 1
+                decrease by 1
+                increase by 5
+                decrease by 5
+

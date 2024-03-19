@@ -1,0 +1,19 @@
+life cycle methods 
+error boundary 
+pure component
+
+========================================
+forms - controlled - state, onchange
+        uncontrolled - refs
+
+=====================
+github - 
+hooks 
+===================
+
+state - variable 
+
+ref - reference (document.getElementById) 
+returns current property - value , css set , focus, javascript basic things 
+
+useRef() hook 

@@ -1,0 +1,24 @@
+css -
+1. inline css  - <h1 style={{color:'',backgroundColor:'',.....}}></h1>
+2. internal css variable
+3. css file  - import 'path' => all the children components can access that css without importing it
+4. css module file  - module.css file 
+    import alias from 'path'
+    only accessible within components , children can not access it without importing.
+5. bootstrap 
+6. react bootstrap - react CSS components
+7. styled-components
+=================================
+bootstrap -> 
+<div class="row"></div>
+
+
+react bootstrap -
+<Button></Button>
+
+
+============================================
+list rendering 
+map()
+====================================
+form validations 

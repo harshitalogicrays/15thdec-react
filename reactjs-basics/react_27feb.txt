@@ -1,0 +1,26 @@
+================================================================================
+Fragment ->  as a wrapper 
+<React.Fragment></React.Fragment>
+
+<Fragment></Fragment>
+<></> => shorthand of Fragment
+
+children props  => 
+map ->
+========================================
+bootstrap grid  ->
+
+=============================================
+
+state 
+form 
+ 
+========================================
+conditional rendering ->
+1. if else 
+2. javascript variable 
+3. ternary operator (?:) (condition ? true : false)
+4. short circuit operator (&&) => condition && true
+
+=========================================================
+
