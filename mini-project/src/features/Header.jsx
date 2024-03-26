@@ -3,10 +3,19 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {FaArrowAltCircleLeft, FaHome, FaList, FaLock, FaPenAlt, FaShoppingCart} from 'react-icons/fa'
 import { Image } from 'react-bootstrap';
+import { Logout, ShowOnLogin, ShowOnLogout } from './hiddenlinks';
 const Header = () => {
+  const navigate=useNavigate()
+  let handleLogout=()=>{
+                sessionStorage.removeItem("logindata")
+                toast.success("loggedOut successfully")
+                navigate('/')
+             }
+
+             
   return (
     <Navbar expand="lg" bg="dark" data-bs-theme="dark">
     <Container fluid>
@@ -35,10 +44,14 @@ const Header = () => {
                 <span class="badge rounded-pill text-bg-danger">0</span >
                 
             </Nav.Link>
-            <Nav.Link as={Link} to='/login'><FaLock/> Login</Nav.Link>
-            <Nav.Link as={Link} to='/register'><FaPenAlt/> Register</Nav.Link>
-            <Nav.Link as={Link} to='/'>Welcome </Nav.Link>
-            <Nav.Link as={Link} to='/'><FaArrowAltCircleLeft/> Logout</Nav.Link>
+            <ShowOnLogout>
+                  <Nav.Link as={Link} to='/login'><FaLock/> Login</Nav.Link>
+                  <Nav.Link as={Link} to='/register'><FaPenAlt/> Register</Nav.Link>
+            </ShowOnLogout>
+            <ShowOnLogin>
+                <Nav.Link as={Link} to='/'>Welcome </Nav.Link>
+                <Nav.Link onClick={handleLogout}><FaArrowAltCircleLeft/> Logout</Nav.Link>
+            </ShowOnLogin>
         </Nav>
       </Navbar.Collapse>
     </Container>

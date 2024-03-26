@@ -1,11 +1,28 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Col, Container, Image, Row ,Form, Button} from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Login = () => {
     let [user,setUser]=useState({email:'',password:''})
-    let handleSubmit=(e)=>{
+    let redirect=useNavigate()
+    let handleSubmit=async(e)=>{
         e.preventDefault()
+        try{
+            let res= await axios.get(`https://660271eb9d7276a755533dd5.mockapi.io/users?email=${user.email}`)
+            console.log(res.data[0])
+            if(res.data[0].password == user.password){
+                let obj={useremail:user.email,role:res.data[0].role,isLoggedIn:true}
+                sessionStorage.setItem("logindata",JSON.stringify(obj))
+                toast.success("loggedIn Successfully")
+                redirect('/')
+            }
+            else toast.error("Invalid Credentials")
+        }
+        catch(err){
+            toast.error("Invalid Credentials")
+        }
     }
   return (
     <Container className='mt-5 shadow p-3'>
