@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "Ram",
+      "email": "ram@gmail.com",
+      "password": 12345,
+      "cpassword": 12345,
+      "role": 2
+    },
+    {
+      "id": 2,
+      "username": "Mera",
+      "email": "meera@gmail.com",
+      "password": 123456,
+      "cpassword": 123456,
+      "role": 2
+    },
+    {
+      "id": 1711435783475,
+      "username": "harshita",
+      "email": "harshita@gmail.com",
+      "password": "harshita",
+      "cpassword": "harshita",
+      "role": "1"
+    },
+    {
+      "id": 1711435922127,
+      "username": "happy",
+      "email": "happy@gmail.com",
+      "password": "happy123",
+      "cpassword": "happy123",
+      "role": "1"
+    }
+  ]
+}
