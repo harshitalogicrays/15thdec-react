@@ -13,10 +13,17 @@ const Login = () => {
             let res= await axios.get(`https://660271eb9d7276a755533dd5.mockapi.io/users?email=${user.email}`)
             console.log(res.data[0])
             if(res.data[0].password == user.password){
-                let obj={useremail:user.email,role:res.data[0].role,isLoggedIn:true}
+                let obj={username:res.data[0].username ,useremail:user.email,role:res.data[0].role,isLoggedIn:true}
                 sessionStorage.setItem("logindata",JSON.stringify(obj))
-                toast.success("loggedIn Successfully")
-                redirect('/')
+                if(res.data[0].role=="0"){
+                    toast.success("loggedIn Successfully")
+                    redirect('/admin')
+                }
+                else if(res.data[0].role=="1"){
+                    toast.success("loggedIn Successfully")
+                    redirect('/')
+                }
+             
             }
             else toast.error("Invalid Credentials")
         }

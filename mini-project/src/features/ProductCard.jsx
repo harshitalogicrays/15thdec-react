@@ -1,7 +1,11 @@
+
 import React from 'react'
 import { Button, Card, Col } from 'react-bootstrap'
 
 const ProductCard = ({product}) => {
+  let handleCart=(id)=>{
+ 
+  }
   return (
     <Col xs={3}>
         <Card className='mb-3'>
@@ -9,7 +13,7 @@ const ProductCard = ({product}) => {
             <Card.Body>
                 <Card.Title>{product.name}</Card.Title>
                 <Card.Text>{product.price}  </Card.Text>
-                <Button variant="primary">Add to Cart</Button>
+                <Button variant="primary" onClick={()=>handleCart(product.id)}>Add to Cart</Button>
             </Card.Body>
         </Card>
     </Col>

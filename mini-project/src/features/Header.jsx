@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -6,16 +6,23 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link, useNavigate } from 'react-router-dom';
 import {FaArrowAltCircleLeft, FaHome, FaList, FaLock, FaPenAlt, FaShoppingCart} from 'react-icons/fa'
 import { Image } from 'react-bootstrap';
-import { Logout, ShowOnLogin, ShowOnLogout } from './hiddenlinks';
+import {  ShowOnLogin, ShowOnLogout } from './hiddenlinks';
+import { toast } from 'react-toastify';
 const Header = () => {
+  let [username,setUsername]=useState("")
   const navigate=useNavigate()
-  let handleLogout=()=>{
+    let handleLogout=()=>{
                 sessionStorage.removeItem("logindata")
                 toast.success("loggedOut successfully")
                 navigate('/')
-             }
+    }
+  useEffect(()=>{
+    if(sessionStorage.getItem("logindata") != null){
+      let obj=JSON.parse(sessionStorage.getItem("logindata"))
+      setUsername(obj.username)
+    }
+  },[sessionStorage.getItem("logindata")])
 
-             
   return (
     <Navbar expand="lg" bg="dark" data-bs-theme="dark">
     <Container fluid>
@@ -49,7 +56,8 @@ const Header = () => {
                   <Nav.Link as={Link} to='/register'><FaPenAlt/> Register</Nav.Link>
             </ShowOnLogout>
             <ShowOnLogin>
-                <Nav.Link as={Link} to='/'>Welcome </Nav.Link>
+                {/* <Nav.Link as={Link} to='/'>{username.length==0 ? "Welcome" :<> {username} </> }</Nav.Link> */}
+                <Nav.Link as={Link} to='/'>Welcome {username}</Nav.Link>
                 <Nav.Link onClick={handleLogout}><FaArrowAltCircleLeft/> Logout</Nav.Link>
             </ShowOnLogin>
         </Nav>
