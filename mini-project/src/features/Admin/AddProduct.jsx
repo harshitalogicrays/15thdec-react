@@ -1,10 +1,12 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { Button, Card, Col, Container, Dropdown, FloatingLabel, Form, FormLabel, Row } from 'react-bootstrap'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Col, Container, Dropdown, FloatingLabel, Form, FormLabel, Image, Row } from 'react-bootstrap'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const AddProduct = () => {
+    const {id}=useParams()
+ 
     let categories= ["Toys","Cloths","Electronics",'Grocery']
     let addProductsSet={name:'',price:'',category:'',image:'',brand:'',desc:'',stock:''}
     const [product,setProduct]=useState({...addProductsSet})
@@ -19,22 +21,50 @@ const AddProduct = () => {
             setProduct({...product,image:reader.result})
        })
     }
+
+    //edit 
+    let getDataUsingId=async()=>{
+        try{
+          let res = await axios.get(`https://660271eb9d7276a755533dd5.mockapi.io/products/${id}`)
+          setProduct(res.data)
+         }
+        catch(err){toast.error(err.message)}
+    }
+    useEffect(()=>{
+        if(id){getDataUsingId()}
+        else {setProduct({...addProductsSet})}
+    },[id])
+
+
     let handleSubmit=async(e)=>{
         e.preventDefault()
         // alert(JSON.stringify(product))
-        try{
-            await axios.post("https://660271eb9d7276a755533dd5.mockapi.io/products",product)
-            toast.success("product added")
-            navigate('/admin/view')
+        if(!id){ //add
+            try{
+                await axios.post("https://660271eb9d7276a755533dd5.mockapi.io/products",product)
+                toast.success("product added")
+                navigate('/admin/view')
+            }
+            catch(err){
+                toast.error(err.message)
+            }
         }
-        catch(err){
-            toast.error(err.message)
+        else { //update
+            try{
+                await axios.put(`https://660271eb9d7276a755533dd5.mockapi.io/products/${id}`,product)
+                toast.success("product updated")
+                navigate('/admin/view')
+            }
+            catch(err){
+                toast.error(err.message)
+            }
         }
+        
     }
     return (
         <>
             <Card>
-                <Card.Header><h1>Add Product
+                <Card.Header><h1>{id ? "Edit" : "Add"} Product
                     <Link to='/admin/view' type="button" class="btn btn-danger btn-lg float-end" >
                         View Products</Link>
                 </h1></Card.Header>
@@ -74,12 +104,14 @@ const AddProduct = () => {
                                         <Form.Label> file upload </Form.Label>
                                         <Form.Control type="file" name="image" onChange={handleImage} />
                                     </Form.Group>
+                                    {id && <Image src={product.image} height={50} width={50} />}
                                     <Form.Group controlId="formFile" className="mb-3">
                                         <Form.Label>Description</Form.Label>
                                   
                                         <Form.Control as="textarea" name='desc' value={product.desc} onChange={(e)=>setProduct({...product,desc:e.target.value})}/>
                                     </Form.Group>
-                                    <Button variant='primary' type="submit">Submit</Button>
+                                    <Button variant='primary' type="submit" 
+                                  >{id?"Update ": "Submit"}</Button>
                                 </Form>
                             </Col>
                         </Row>

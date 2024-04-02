@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Routing from "./features/Routing"
+import DataProvider from "./DataProvider";
 
 function App() {
 
@@ -18,7 +19,9 @@ function App() {
       pauseOnHover={false}
       theme="colored"
       />
-   <Routing/>
+      <DataProvider>
+          <Routing/>
+      </DataProvider>
   </>
   )
 }

@@ -1,8 +1,11 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+// import { DataContext } from '../DataProvider'
 
 const Home = () => {
+  // const data=useContext(DataContext)
+  // console.log(data)
   let [todos,setTodos]=useState([])
     // let handleclick=(err)=>{
     //     toast.error(err)

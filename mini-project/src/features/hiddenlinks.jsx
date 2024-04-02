@@ -78,3 +78,30 @@ export const AdminLayout=({children})=>{
         </>
        )
      }
+
+
+export const Protected=({children})=>{
+  if(sessionStorage.getItem("logindata")!=null){
+    let obj=JSON.parse(sessionStorage.getItem("logindata"))
+    if(obj.isLoggedIn && obj.role=="1"){
+        return children
+    }
+    else return <Navigate to='/login' replace={true}/>   
+}
+  else {
+    return <Navigate to='/login' replace={true}/>   
+  }
+}
+
+export const ProtectedAdmin=({children})=>{
+  if(sessionStorage.getItem("logindata")!=null){
+    let obj=JSON.parse(sessionStorage.getItem("logindata"))
+    if(obj.isLoggedIn && obj.role=="0"){
+        return children
+    }
+    else return <Navigate to='/login' replace={true}/>   
+}
+  else {
+    return <Navigate to='/login' replace={true}/>   
+  }
+}

@@ -57,9 +57,9 @@ const ViewProduct = () => {
             <td><img src={product.image} height="50px" width={50}/></td>
             <td>{product.price}</td>
             <td>{product.stock}</td>
-            <td> <button type="button" class="btn btn-success me-2"><FaPenAlt/></button>
+            <td> <Link to={`/admin/edit/${product.id}`} type="button" class="btn btn-success me-2"><FaPenAlt/></Link>
                  <button type="button" class="btn btn-danger me-2" 
-                 onClick={()=>handleDelete(product.id)}><FaTrashAlt/></button>
+                 onClick={()=>handleDelete(product.id)} ><FaTrashAlt/></button>
              </td>
             </tr>
         )}      

@@ -47,7 +47,7 @@ const Header = () => {
           </NavDropdown> */}
         </Nav>
         <Nav>
-            <Nav.Link as={Link} to='/'><FaShoppingCart size={30}/>
+            <Nav.Link as={Link} to='/cart'><FaShoppingCart size={30}/>
                 <span class="badge rounded-pill text-bg-danger">0</span >
                 
             </Nav.Link>
