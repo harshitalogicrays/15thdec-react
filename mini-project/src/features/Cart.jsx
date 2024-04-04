@@ -1,11 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Col, Container, Row, Table } from 'react-bootstrap'
 import { DataContext } from '../DataProvider'
 import { FaTrashAlt } from 'react-icons/fa'
 
 const Cart = () => {
   const context=useContext(DataContext)
-  let {cart,total}=context
+  let {cart,total,increase,decrease,removeFromCart,emptyCart,calculateTotal}=context
+
+  useEffect(()=>{
+    calculateTotal()
+  },[context])
   return (
    <>
    <Container className='mt-5 shadow p-2'>
@@ -29,13 +33,13 @@ const Cart = () => {
               <td><img src={c.image} height={40} width={40}/></td>
               <td>{c.price}</td>
               <td> 
-                <button type="button">-</button>
-                <input type="text" style={{width:'40px',textAlign:'center'}} value="1"/>
-                <button type="button">+</button>
+                <button type="button" onClick={()=>decrease(c)}>-</button>
+                <input type="text" style={{width:'40px',textAlign:'center'}} value={c.qty}/>
+                <button type="button" onClick={()=>increase(c)}>+</button>
               </td>
-              <td>{c.price}</td>
+              <td>{c.price * c.qty}</td>
               <td>
-                <button  type="button" class="btn btn-danger">
+                <button  type="button" class="btn btn-danger" onClick={()=>removeFromCart(c.id)}>
                   <FaTrashAlt/>Remove
                 </button>
                 </td>       
@@ -47,14 +51,14 @@ const Cart = () => {
       <Col xs={9}>
           <button
             type="button"
-            class="btn btn-danger btn-lg"
+            class="btn btn-danger btn-lg" onClick={()=>emptyCart()}
           >
             Empty Cart
           </button>
           
       </Col>
       <Col xs={3}>
-          <h3>Total: <span className='float-end'>$</span></h3>
+          <h3>Total: <span className='float-end'>${total}</span></h3>
           <hr/>
           <div class="d-grid gap-2">
             <button

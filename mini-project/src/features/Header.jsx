@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -6,9 +6,11 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link, useNavigate } from 'react-router-dom';
 import {FaArrowAltCircleLeft, FaHome, FaList, FaLock, FaPenAlt, FaShoppingCart} from 'react-icons/fa'
 import { Image } from 'react-bootstrap';
-import {  ShowOnLogin, ShowOnLogout } from './hiddenlinks';
+import {  CartShow, ShowOnLogin, ShowOnLogout } from './hiddenlinks';
 import { toast } from 'react-toastify';
+import { DataContext } from '../DataProvider';
 const Header = () => {
+
   let [username,setUsername]=useState("")
   const navigate=useNavigate()
     let handleLogout=()=>{
@@ -47,9 +49,7 @@ const Header = () => {
           </NavDropdown> */}
         </Nav>
         <Nav>
-            <Nav.Link as={Link} to='/cart'><FaShoppingCart size={30}/>
-                <span class="badge rounded-pill text-bg-danger">0</span >
-                
+            <Nav.Link><CartShow/>
             </Nav.Link>
             <ShowOnLogout>
                   <Nav.Link as={Link} to='/login'><FaLock/> Login</Nav.Link>

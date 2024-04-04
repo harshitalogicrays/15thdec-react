@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import { Col, Container, Image, Row ,Form, Button} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Loader from './Loader'
 const Register = () => {
     const redirect=useNavigate()
     let initialState={username:'',email:'',password:'',cpassword:'',role:'1'}
     const [user,setUser]=useState({...initialState})
+    const [isLoading,setIsLoading]=useState(false)
     // let handleSubmit=async(e)=>{
     //     e.preventDefault()
     //     try{
@@ -19,6 +21,7 @@ const Register = () => {
 
     let handleSubmit=async(e)=>{
         e.preventDefault()
+        setIsLoading(true)
         try{
             await fetch("https://660271eb9d7276a755533dd5.mockapi.io/users",{
                 method:"POST",
@@ -27,12 +30,15 @@ const Register = () => {
             }) 
             toast.success("registered successfully")
             redirect('/login')
+            setIsLoading(false)
         }
-        catch(err){toast.error(err.message)}
+        catch(err){setIsLoading(false)
+            toast.error(err.message)}
     }
 
   return (
     <Container className='mt-5 shadow p-3'>
+        {isLoading && <Loader/>}
         <h1>Register Page</h1><hr/>
         <Row>
             <Col>

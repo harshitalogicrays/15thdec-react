@@ -3,12 +3,15 @@ import React, { useState } from 'react'
 import { Col, Container, Image, Row ,Form, Button} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Loader from './Loader'
 
 const Login = () => {
     let [user,setUser]=useState({email:'',password:''})
+    let [isLoading,setIsLoading]=useState(false)
     let redirect=useNavigate()
     let handleSubmit=async(e)=>{
         e.preventDefault()
+        setIsLoading(true)
         try{
             let res= await axios.get(`https://660271eb9d7276a755533dd5.mockapi.io/users?email=${user.email}`)
             console.log(res.data[0])
@@ -23,16 +26,21 @@ const Login = () => {
                     toast.success("loggedIn Successfully")
                     redirect('/')
                 }
-             
+             setIsLoading(false)
             }
-            else toast.error("Invalid Credentials")
+            else {
+                setIsLoading(false)
+                toast.error("Invalid Credentials")
+            }
         }
         catch(err){
+            setIsLoading(false)
             toast.error("Invalid Credentials")
         }
     }
   return (
     <Container className='mt-5 shadow p-3'>
+        {isLoading && <Loader/>}
         <h1>Login Page</h1><hr/>
         <Row>
             <Col>

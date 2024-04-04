@@ -5,7 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Image, NavDropdown } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DataContext } from "../DataProvider";
 
 export const ShowOnLogin=({children})=>{
     if(sessionStorage.getItem("logindata")!=null){
@@ -104,4 +105,17 @@ export const ProtectedAdmin=({children})=>{
   else {
     return <Navigate to='/login' replace={true}/>   
   }
+}
+
+export const CartShow=()=>{
+  const context=useContext(DataContext)
+  let {cart}=context
+  return (<>
+  <Link to='/cart' >
+          <FaShoppingCart size={30} style={{color:'white'}}/>
+                <span class="badge rounded-pill text-bg-danger">{cart.length}</span >
+  </Link>
+    
+                
+  </>)
 }
