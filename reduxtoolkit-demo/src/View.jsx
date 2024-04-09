@@ -1,6 +1,7 @@
 import React from 'react'
-
+import {useSelector} from 'react-redux'
 const View = () => {
+    useSelector()
   return (
    <>
     <table className='table table-bordered table-striped table-hover'>
