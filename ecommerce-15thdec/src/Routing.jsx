@@ -4,13 +4,14 @@ import Register from "./pages/Register";
 import Pagenotfound from "./pages/Pagenotfound";
 import Home from "./pages/Home";
 import App from "./App";
+import DefaultLayout from "./features/DefaultLayout";
 
 export const router = createBrowserRouter([
     {
       path: "/",
       element: <App />,
       children: [
-        {path: "", element: <Home />  },
+        {path: "", element:<DefaultLayout> <Home /></DefaultLayout>  },
         {path: "login", element: <Login />  },
         { path: "register", element: <Register />  },
         {  path: "*", element: <Pagenotfound /> },

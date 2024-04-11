@@ -1,6 +1,8 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { Col, Container, Image, Row ,Form, Button} from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
+import { auth } from '../firebase/config'
 const Register = () => {
     const redirect=useNavigate()
     let initialState={username:'',email:'',password:'',cpassword:'',role:'1'}
@@ -9,6 +11,18 @@ const Register = () => {
        let handleSubmit=async(e)=>{
         e.preventDefault()
         setIsLoading(true)
+        createUserWithEmailAndPassword(auth, user.email, user.password)
+            .then((userCredential) => {
+                // Signed up 
+                const user = userCredential.user;
+                alert("registered")
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+            });
          }
 
   return (
