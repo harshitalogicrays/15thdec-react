@@ -9,6 +9,7 @@ const DefaultLayout = ({children}) => {
     <Container>
         {children}
     </Container>
+    
    </>
   )
 }
