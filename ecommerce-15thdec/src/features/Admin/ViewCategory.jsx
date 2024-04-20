@@ -1,12 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Card, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import useFetchCollection from '../../custom hook/useFetchCollection'
 import { FaPenAlt, FaTrashAlt } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { STORE_CATEGORIES, selectCategories } from '../../redux/categorySlice'
+import { toast } from 'react-toastify'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { db } from '../../firebase/config'
 
 const ViewCategory = () => {
-  const {data:categories}=useFetchCollection("categories")
+  const {data}=useFetchCollection("categories")
   // console.log(data)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(STORE_CATEGORIES(data))
+  },[data])
+  const categories=useSelector(selectCategories)
+
+  let handleDelete=async(id)=>{
+    if(window.confirm('are you sure to delete this??')){
+      try{
+        const docRef=doc(db,"categories",id)
+        await deleteDoc(docRef)
+        toast.success("category deleted")
+      }
+      catch(err){toast.error(err.message)}
+    }
+  }
   return (
   <>
     <Card>
@@ -37,8 +58,10 @@ const ViewCategory = () => {
             :<span class="badge rounded-pill text-bg-danger">Inactive</span >
             }</td>
             <td>
-              <Button variant='success' className='me-2'><FaPenAlt/></Button>
-              <Button variant='danger' className='me-2'><FaTrashAlt/></Button>
+              <Button variant='success' className='me-2' as={Link} 
+              to={`/admin/editcategory/${c.id}`}
+              ><FaPenAlt/></Button>
+              <Button variant='danger' className='me-2' onClick={()=>handleDelete(c.id)}><FaTrashAlt/></Button>
             </td>
           </tr>
           )}

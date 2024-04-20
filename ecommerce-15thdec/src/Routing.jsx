@@ -10,6 +10,8 @@ import Dashboard from "./features/Admin/Dashboard";
 import AddProduct from "./features/Admin/AddProduct";
 import AddCategory from "./features/Admin/AddCategory";
 import ViewCategory from "./features/Admin/ViewCategory";
+import AddSlider from "./features/Admin/AddSlider";
+import ViewSlider from "./features/Admin/ViewSlider";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +28,9 @@ export const router = createBrowserRouter([
         {path:'addcategory',element:<AddCategory/>},
         {path:'viewcategory',element:<ViewCategory/>},
         {path:'editcategory/:id',element:<AddCategory/>},
+        {path:'addslider',element:<AddSlider/>},
+        {path:'viewslider',element:<ViewSlider/>},
+        {path:'editslider/:id',element:<AddSlider/>},
       ]
     },
      {  path: "*", element: <Pagenotfound /> },
