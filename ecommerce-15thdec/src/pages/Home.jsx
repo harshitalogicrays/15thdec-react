@@ -1,10 +1,12 @@
 import React from 'react'
+import Slider from '../features/Slider'
+import Products from '../features/Products'
 
 const Home = () => {
-    // console.log(import.meta.env.VITE_APPID) // "123"
   return (
    <>
-    <h1>Home Page</h1>
+    <Slider/>
+    <Products/>
    </>
   )
 }

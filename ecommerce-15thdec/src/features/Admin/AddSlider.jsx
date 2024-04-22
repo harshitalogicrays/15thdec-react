@@ -1,11 +1,12 @@
 import { Timestamp, addDoc, collection, doc, setDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Form } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { db, storage } from '../../firebase/config'
 import { useSelector } from 'react-redux'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { selectSliders } from '../../redux/sliderSlice'
 
 
 const AddSlider = () => {
@@ -16,15 +17,15 @@ const AddSlider = () => {
 
     // //edit 
     const {id}=useParams()
-    // const categories=useSelector(selectCategories) 
-    // const categoryEdit=categories.find((item)=>item.id==id)
-    // useEffect(()=>{
-    //     if(id){
-    //         setCategory({...categoryEdit})
-    //         setIsActive(categoryEdit.status=="Active"?true:false)
-    //         }
-    //     else {setCategory({title:'',desc:'',status:''})}
-    // },[id])
+    const sliders=useSelector(selectSliders) 
+    const sliderEdit=sliders.find((item)=>item.id==id)
+    React.useEffect(()=>{
+        if(id){
+            setSlider({...sliderEdit})
+            setIsActive(sliderEdit.status=="Active"?true:false)
+            }
+        else {setSlider({title:'',desc:'',status:'',image:''})}
+    },[id])
 
 
 let handleImage=(e)=>{
@@ -62,11 +63,14 @@ uploadTask.on('state_changed',
             }
         }
         else{
+            if(sliderEdit.image != slider.image){
+                deleteObject(ref(storage,sliderEdit.image))
+            }
             try{
                 const docRef=doc(db,"sliders",id)
-                await setDoc(docRef,{...category,
+                await setDoc(docRef,{...slider,
                     status:isActive ? "Active":"Inactive", 
-                    createdAt:categoryEdit.createdAt,
+                    createdAt:sliderEdit.createdAt,
                     editedAt:Timestamp.now().toMillis() })
                 toast.success("slider updated")
                 navigate('/admin/viewslider')
@@ -100,6 +104,7 @@ uploadTask.on('state_changed',
                         <Form.Label>Choose Image</Form.Label>
                         <Form.Control type="file" onChange={handleImage}></Form.Control>
                     </Form.Group>
+                    {id && <img src={slider.image} height={50} width={50}/>}
                     <Form.Group className='mb-3'>
                         <Form.Label>Description</Form.Label>
                         <Form.Control as='textarea' value={slider.desc} onChange={(e)=>setSlider({...slider,desc:e.target.value})}></Form.Control>

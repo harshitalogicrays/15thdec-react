@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import Loader from '../features/Loader'
 import { FaGoogle } from 'react-icons/fa'
 import { GoogleAuthProvider } from 'firebase/auth'
-import { Timestamp, doc, setDoc } from 'firebase/firestore'
+import { Timestamp, doc, getDoc, setDoc } from 'firebase/firestore'
 
 const Login = () => {
     let [user,setUser]=useState({email:'',password:''})
@@ -17,11 +17,27 @@ const Login = () => {
         e.preventDefault()
         setIsLoading(true)
         signInWithEmailAndPassword(auth, user.email, user.password)
-        .then((userCredential) => {
+        .then(async(userCredential) => {
             const user1 = userCredential.user;
-            redirect('/')
-            toast.success("loggedIn Successfully")
-            setIsLoading(false)
+            try{
+                const docRef=doc(db,"users",user1.uid)
+                const docSnap=await getDoc(docRef)
+                if(docSnap.exists()){
+                  // console.log(docSnap.data())
+                  let role=docSnap.data().role
+                    if(role=="0"){
+                        redirect('/admin')
+                    }   
+                    else if(role=="1"){
+                        redirect('/')
+                    }     
+                    toast.success("loggedIn Successfully")
+                    setIsLoading(false)   
+              }
+            }
+              catch(error){console.log(error.message)}
+   
+           
         })
         .catch((error) => { setIsLoading(false)
             toast.error(error.message)

@@ -3,8 +3,8 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import {FaArrowAltCircleLeft, FaHome, FaList, FaLock, FaPenAlt} from 'react-icons/fa'
-import { Image } from 'react-bootstrap';
+import {FaArrowAltCircleLeft, FaHome, FaList, FaLock, FaPenAlt, FaSearch} from 'react-icons/fa'
+import { Button, Form, Image, InputGroup } from 'react-bootstrap';
 import {  CartShow, ShowOnLogin, ShowOnLogout } from './hiddenlinks';
 import Logout from './Logout';
 import { auth, db } from '../firebase/config';
@@ -43,7 +43,16 @@ let role=useSelector(selectUserRole)
     },[auth])
 
   return (
-    <Navbar expand="lg" bg="dark" data-bs-theme="dark">
+    <>
+     {(isLoggedIn && role=='0') ?
+      <h2 className='text-center bg-danger'> <Link
+    to='/admin'
+    >
+      Admin Panel
+    </Link></h2>
+      :''}
+   
+     <Navbar expand="lg" bg="dark" data-bs-theme="dark">
     <Container fluid>
       <Navbar.Brand href="#home">
         <Image src={'/src/assets/images/a.jpg'} width={40} height={40}/>
@@ -52,9 +61,10 @@ let role=useSelector(selectUserRole)
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link as={Link} to='/'><FaHome/> Home</Nav.Link>
+          <Nav.Link as={Link} to='/'><FaHome/> about</Nav.Link>
           <Nav.Link as={Link} to='/products'><FaList/> Products</Nav.Link>
         </Nav>
-        {(isLoggedIn && role=='0') ?
+        {/* {(isLoggedIn && role=='0') ?
         <Nav className='me-auto'>
             <Link
               type="button"
@@ -63,7 +73,14 @@ let role=useSelector(selectUserRole)
               Admin Panel
             </Link>
             
-        </Nav> :''}
+        </Nav> :''} */}
+
+         <Form className='me-auto'>
+        <InputGroup >  
+          <Form.Control placeholder='search here'></Form.Control>
+          <Button variant='danger'><FaSearch/></Button>
+        </InputGroup>
+        </Form>
         <Nav>
           {role !='0' && 
             <Nav.Link><CartShow/>
@@ -80,6 +97,8 @@ let role=useSelector(selectUserRole)
       </Navbar.Collapse>
     </Container>
   </Navbar>
+    </>
+   
 );
 }
 

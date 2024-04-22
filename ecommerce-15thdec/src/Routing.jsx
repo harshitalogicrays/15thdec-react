@@ -12,6 +12,9 @@ import AddCategory from "./features/Admin/AddCategory";
 import ViewCategory from "./features/Admin/ViewCategory";
 import AddSlider from "./features/Admin/AddSlider";
 import ViewSlider from "./features/Admin/ViewSlider";
+import Products from "./features/Products";
+import Cart from "./features/Cart";
+import ViewProduct from "./features/Admin/ViewProduct";
 
 export const router = createBrowserRouter([
     {
@@ -21,10 +24,13 @@ export const router = createBrowserRouter([
         {path: "", element:<DefaultLayout> <Home /></DefaultLayout>  },
         {path: "login", element: <Login />  },
         { path: "register", element: <Register />  },
+        { path: "products", element:<DefaultLayout><Products /></DefaultLayout>   },
+        { path: "cart", element: <Cart />  },
         {path:'admin',element:<AdminLayout></AdminLayout>,
       children:[
         {path:'',element:<Dashboard/>},
         {path:'addproduct',element:<AddProduct/>},
+        {path:'viewproduct',element:<ViewProduct/>},
         {path:'addcategory',element:<AddCategory/>},
         {path:'viewcategory',element:<ViewCategory/>},
         {path:'editcategory/:id',element:<AddCategory/>},
