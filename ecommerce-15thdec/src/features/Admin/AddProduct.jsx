@@ -12,7 +12,7 @@ const AddProduct = () => {
     const navigate=useNavigate()
 
     let handleImage=(e)=>{
-   
+        console.log(e.target.files)
     }
 
     //edit 
@@ -62,7 +62,7 @@ const AddProduct = () => {
                                     </Row>
                                     <Form.Group controlId="formFile" className="mb-3">
                                         <Form.Label> file upload </Form.Label>
-                                        <Form.Control type="file" name="image" onChange={handleImage} />
+                                        <Form.Control type="file" name="image" onChange={handleImage} multiple/>
                                     </Form.Group>
                                  
                                     <Form.Group controlId="formFile" className="mb-3">

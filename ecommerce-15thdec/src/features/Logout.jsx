@@ -5,7 +5,7 @@ import { auth } from '../firebase/config';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Logout = () => {
+const Logout = ({...props}) => {
     const navigate=useNavigate()
     let handleLogout=()=>{
         signOut(auth).then(() => {
@@ -18,7 +18,7 @@ const Logout = () => {
     }
   return (
   <>
-   <span onClick={handleLogout}> <FaArrowAltCircleLeft/> Logout</span>
+   <span onClick={handleLogout} {...props}> <FaArrowAltCircleLeft/> Logout</span>
   </>
   )
 }
