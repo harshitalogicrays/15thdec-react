@@ -3,11 +3,32 @@ import { Card, Table } from 'react-bootstrap'
 import { FaPenAlt, FaTrashAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import useFetchCollection from '../../custom hook/useFetchCollection'
+import { useDispatch, useSelector } from 'react-redux'
+import { STORE_PRODUCTS, selectproducts } from '../../redux/productSlice'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { db, storage } from '../../firebase/config'
+import { deleteObject, ref } from 'firebase/storage'
 
 const ViewProduct = () => {
-    let [products,setProducts]=useState([])
-   let handleDelete=async(id)=>{
-     
+  const {data}=useFetchCollection("products")
+  // console.log(data)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(STORE_PRODUCTS(data))
+  },[data])
+  const products=useSelector(selectproducts)
+
+   let handleDelete=async(id,images)=>{
+    if(window.confirm('are you sure to delete this??')){
+      try{
+        const docRef=doc(db,"products",id)
+        images.forEach(image=>deleteObject(ref(storage,image)))        
+        deleteDoc(docRef)
+        toast.success("product deleted")
+      }
+      catch(err){toast.error(err.message)}
+    }
     }
   return (
     <Card>
@@ -26,21 +47,21 @@ const ViewProduct = () => {
             <th>Stock</th> <th>Action</th>        </tr>
       </thead>
       <tbody>
-        {/* {products.length==0 && <tr><td colSpan={7}>No product found</td></tr>}
+        {products.length==0 && <tr><td colSpan={7}>No product found</td></tr>}
         {products.map((product,i)=>
             <tr key={product.id}>
             <td>{product.id}</td>
             <td>{product.category}</td>
             <td>{product.name}</td>
-            <td><img src={product.image} height="50px" width={50}/></td>
+            <td><img src={product.image[0]} height="50px" width={50}/></td>
             <td>{product.price}</td>
             <td>{product.stock}</td>
-            <td> <Link to={`/admin/edit/${product.id}`} type="button" class="btn btn-success me-2"><FaPenAlt/></Link>
+            <td> <Link to={`/admin/editproduct/${product.id}`} type="button" class="btn btn-success me-2"><FaPenAlt/></Link>
                  <button type="button" class="btn btn-danger me-2" 
-                 onClick={()=>handleDelete(product.id)} ><FaTrashAlt/></button>
+                 onClick={()=>handleDelete(product.id,product.image)} ><FaTrashAlt/></button>
              </td>
             </tr>
-        )}       */}
+        )}      
         </tbody>
     </Table>
         </Card.Body>

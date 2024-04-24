@@ -38,7 +38,7 @@ const ProductsList = ({products}) => {
          </div></Col>
       </Row>
 
-      <Row>
+      <Row className='mt-4'>
          {products.map((product,i)=><ProductCard key={[product.id]}  product={product}/>)}
       </Row>
       </>

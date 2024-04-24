@@ -10,9 +10,9 @@ const ProductCard = ({product}) => {
   return (
     <Col xs={3}>
         <Card className='mb-3'>
-        <Card.Img variant="top"  src={product.image} height={200}/>
+        <Card.Img variant="top"  src={product.image[0]} height={180}/>
             <Card.Body>
-                <Card.Title>{product.name}</Card.Title>
+                 <Card.Title>{product.category} <hr/>{product.name}</Card.Title>
                 <Card.Text>{product.price}  </Card.Text>
                 <Button variant="primary">Add to Cart</Button>
                 

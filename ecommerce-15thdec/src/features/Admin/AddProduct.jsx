@@ -1,25 +1,96 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Button, Card, Col, Container, Dropdown, FloatingLabel, Form, FormLabel, Image, Row } from 'react-bootstrap'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useFetchCollection from '../../custom hook/useFetchCollection'
+import { Timestamp, addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { db, storage } from '../../firebase/config'
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { useSelector } from 'react-redux'
+import { selectproducts } from '../../redux/productSlice'
 
 const AddProduct = () => {
-  const {data:categories}=useFetchCollection("categories")
-    const {id}=useParams()
-    let addProductsSet={name:'',price:'',category:'',image:'',brand:'',desc:'',stock:''}
+  const {data:categories}=useFetchCollection("categories")  
+    let addProductsSet={name:'',price:'',category:'',image:[],brand:'',desc:'',stock:''}
     const [product,setProduct]=useState({...addProductsSet})
     const navigate=useNavigate()
+    const [uploadProgress,setUploadProgress]=useState(0)
+
+    //edit
+    const {id}=useParams()
+    const products=useSelector(selectproducts)
+    const productEdit=products.find(item=>item.id==id)
+    const [oldImages,setOldImages]=useState([])
+    const [newImages,setNewImages]=useState([])
+    useEffect(()=>{
+        if(id){
+            setProduct({...productEdit})
+            setOldImages(productEdit.image)
+        }
+        else {
+           setProduct({...addProductsSet}) 
+        }
+    },[id])
+
 
     let handleImage=(e)=>{
-        console.log(e.target.files)
+        let images=e.target.files
+        let arr=[]
+        Array.from(images).forEach((file)=>{        
+        const storageRef = ref(storage, `ecommerce-15th/products/${Date.now()}`); 
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on('state_changed', 
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress)
+        }, 
+        (error) => { console.log(error.message)}, 
+        () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            arr.push(downloadURL)   //['url1','url2','url3','url4','url5']
+            setNewImages(prevImg => [...prevImg ,downloadURL])
+            });
+        }
+        );
+    })
+    setProduct({...product,image:arr})
     }
 
-    //edit 
+   let removeImage=(i,img)=>{
+    const updatedImages=[...oldImages]
+    updatedImages.splice(i,1)
+    setOldImages(updatedImages)
+    deleteObject(ref(storage,img))
+   }
 
  let handleSubmit=async(e)=>{
         e.preventDefault()
-        alert(JSON.stringify(product))
+        if(!id){
+            try{
+                const docRef=collection(db,"products")
+                await addDoc(docRef,{...product,createdAt:Timestamp.now().toMillis() })
+                toast.success("product added")
+                navigate('/admin/viewproduct')
+            }
+            catch(error){
+                toast.error(error.message)
+            }
+        }
+        else {
+            let allimages=[...oldImages,...newImages]
+            try{
+                const docRef=doc(db,"products",id)
+                await setDoc(docRef,{...product,createdAt:productEdit.createdAt,
+                    image:allimages,
+                    editedAt:Timestamp.now().toMillis() })
+                toast.success("product updated")
+                navigate('/admin/viewproduct')
+            }
+            catch(error){
+                toast.error(error.message)
+            }
+        }
+       
     }
     return (
         <>
@@ -60,11 +131,28 @@ const AddProduct = () => {
                                         <Form.Control  type="number" name="stock" value={product.stock} onChange={(e)=>setProduct({...product,stock:e.target.value})}/>
                                     </Form.Group>
                                     </Row>
+                                    {uploadProgress > 0 &&
+                        <div class="progress">
+                        <div class="progress-bar" style={{width: `${uploadProgress}%`}}>
+                            {uploadProgress < 100 ? `uploading ${uploadProgress}%` : `uploaded ${uploadProgress}%`}
+                        </div>
+                      </div>
+                    }
                                     <Form.Group controlId="formFile" className="mb-3">
                                         <Form.Label> file upload </Form.Label>
-                                        <Form.Control type="file" name="image" onChange={handleImage} multiple/>
+                                        <Form.Control type="file"  onChange={handleImage} multiple/>
                                     </Form.Group>
                                  
+                                 {id && <>
+                                    {oldImages.map((img,i)=>
+                                    <Fragment key={i}>
+                                        <img src={img}  height={100} width={100}/>
+                                        <span style={{position:'relative',top:'-50px',left:'-4px',cursor:'pointer'}}
+                                        onClick={()=>removeImage(i,img)}>X</span>
+                                    </Fragment>
+                                )}
+                                 </>}
+
                                     <Form.Group controlId="formFile" className="mb-3">
                                         <Form.Label>Description</Form.Label>
                                   
