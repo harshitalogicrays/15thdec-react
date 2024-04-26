@@ -15,6 +15,7 @@ import ViewSlider from "./features/Admin/ViewSlider";
 import Products from "./features/Products";
 import Cart from "./features/Cart";
 import ViewProduct from "./features/Admin/ViewProduct";
+import ProductDetails from "./features/ProductDetails";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
         {path: "login", element: <Login />  },
         { path: "register", element: <Register />  },
         { path: "products", element:<DefaultLayout><Products /></DefaultLayout>   },
+        { path: "productdetails/:id", element:<DefaultLayout><ProductDetails /></DefaultLayout>   },
         { path: "cart", element: <Cart />  },
         {path:'admin',element:<AdminLayout></AdminLayout>,
       children:[

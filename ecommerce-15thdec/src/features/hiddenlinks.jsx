@@ -7,6 +7,7 @@ import { Image, NavDropdown } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/authSlice";
+import { selectCartItems } from "../redux/cartSlice";
 
 export const ShowOnLogin=({children})=>{
     const isLoggedIn=useSelector(selectIsLoggedIn)
@@ -21,10 +22,11 @@ export const ShowOnLogout=({children})=>{
 }
 
 export const CartShow=()=>{
+  const cartItems=useSelector(selectCartItems)
   return (<>
   <Link to='/cart' >
           <FaShoppingCart size={30} style={{color:'white'}}/>
-                <span class="badge rounded-pill text-bg-danger">0</span >
+                <span class="badge rounded-pill text-bg-danger">{cartItems.length}</span >
   </Link>
     
                 

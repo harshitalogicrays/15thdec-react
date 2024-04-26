@@ -8,11 +8,20 @@ import Loader from '../features/Loader'
 import { FaGoogle } from 'react-icons/fa'
 import { GoogleAuthProvider } from 'firebase/auth'
 import { Timestamp, doc, getDoc, setDoc } from 'firebase/firestore'
+import { useSelector } from 'react-redux'
+import { selectURL } from '../redux/cartSlice'
 
 const Login = () => {
     let [user,setUser]=useState({email:'',password:''})
     let [isLoading,setIsLoading]=useState(false)
     let redirect=useNavigate()
+
+    let URL1=useSelector(selectURL)
+    let redirectURL=()=>{
+      if(URL1.includes('cart')){redirect('/cart')}
+      else {redirect('/')}
+    }
+
     let handleSubmit=async(e)=>{
         e.preventDefault()
         setIsLoading(true)
@@ -29,7 +38,8 @@ const Login = () => {
                         redirect('/admin')
                     }   
                     else if(role=="1"){
-                        redirect('/')
+                        // redirect('/')
+                        redirectURL()
                     }     
                     toast.success("loggedIn Successfully")
                     setIsLoading(false)   
@@ -51,7 +61,8 @@ const Login = () => {
           try{
             const docRef=doc(db,"users",user1.uid)
             await setDoc(docRef,{username:user1.displayName,email:user1.email,role:'1',createdAt:Timestamp.now().toMillis()})
-            redirect('/')
+            // redirect('/')
+            redirectURL()
             toast.success("loggedIn Successfully")
           }
           catch(error){
