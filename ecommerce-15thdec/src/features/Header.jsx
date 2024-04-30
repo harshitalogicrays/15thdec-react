@@ -13,6 +13,9 @@ import { toast } from 'react-toastify';
 import { doc, getDoc } from 'firebase/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGIN_USER, LOGOUT_USER, selectIsLoggedIn, selectUserName, selectUserRole } from '../redux/authSlice';
+import { FILTER_BY_SEARCH } from '../redux/filterSlice';
+import useFetchCollection from '../custom hook/useFetchCollection';
+import { STORE_PRODUCTS, selectproducts } from '../redux/productSlice';
 const Header = () => {
 let username=useSelector(selectUserName)
 let isLoggedIn=useSelector(selectIsLoggedIn)
@@ -42,6 +45,22 @@ let role=useSelector(selectUserRole)
       });
     },[auth])
 
+
+//search -
+let [search,setSearch]=useState('')
+let navigate=useNavigate()
+const {data}=useFetchCollection("products")
+useEffect(()=>{dispatch(STORE_PRODUCTS(data))},[data])
+const products=useSelector(selectproducts)
+// let handleSearch=(e)=>{
+//   e.preventDefault()
+//   dispatch(FILTER_BY_SEARCH({products,search}))
+// }
+
+useEffect(()=>{
+  dispatch(FILTER_BY_SEARCH({products,search}))
+  navigate('/products')
+},[search])
   return (
     <>
      {(isLoggedIn && role=='0') ?
@@ -77,8 +96,9 @@ let role=useSelector(selectUserRole)
 
          <Form className='me-auto'>
         <InputGroup >  
-          <Form.Control placeholder='search here'></Form.Control>
-          <Button variant='danger'><FaSearch/></Button>
+          <Form.Control placeholder='search here' type="text"  
+          value={search} onChange={(e)=>setSearch(e.target.value)}></Form.Control>
+          {/* <Button variant='danger' type="submit" onClick={handleSearch}><FaSearch/></Button> */}
         </InputGroup>
         </Form>
         <Nav>
