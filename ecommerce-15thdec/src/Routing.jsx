@@ -16,6 +16,8 @@ import Products from "./features/Products";
 import Cart from "./features/Cart";
 import ViewProduct from "./features/Admin/ViewProduct";
 import ProductDetails from "./features/ProductDetails";
+import CheckoutDetails from "./features/CheckoutDetails";
+import Checkout from "./features/Checkout";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
         { path: "products", element:<DefaultLayout><Products /></DefaultLayout>   },
         { path: "productdetails/:id", element:<DefaultLayout><ProductDetails /></DefaultLayout>   },
         { path: "cart", element: <Cart />  },
+        { path: "checkout-details", element: <CheckoutDetails/>  },
+        { path: "checkout", element: <Checkout/>  },
         {path:'admin',element:<AdminLayout></AdminLayout>,
       children:[
         {path:'',element:<Dashboard/>},
