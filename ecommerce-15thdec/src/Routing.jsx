@@ -18,6 +18,10 @@ import ViewProduct from "./features/Admin/ViewProduct";
 import ProductDetails from "./features/ProductDetails";
 import CheckoutDetails from "./features/CheckoutDetails";
 import Checkout from "./features/Checkout";
+import MyOrders from "./features/MyOrders";
+import MyOrderDetails from "./features/MyOrderDetails";
+import Orders from "./features/Admin/Orders";
+import OrderDetails from "./features/Admin/OrderDetails";
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +36,8 @@ export const router = createBrowserRouter([
         { path: "cart", element: <Cart />  },
         { path: "checkout-details", element: <CheckoutDetails/>  },
         { path: "checkout", element: <Checkout/>  },
+        { path: "myorders", element: <DefaultLayout><MyOrders/> </DefaultLayout> },
+        { path: "myorders/details/:id", element: <DefaultLayout><MyOrderDetails/> </DefaultLayout> },
         {path:'admin',element:<AdminLayout></AdminLayout>,
       children:[
         {path:'',element:<Dashboard/>},
@@ -44,6 +50,8 @@ export const router = createBrowserRouter([
         {path:'addslider',element:<AddSlider/>},
         {path:'viewslider',element:<ViewSlider/>},
         {path:'editslider/:id',element:<AddSlider/>},
+        {path:'orders',element:<Orders/>},
+        {path:'orders/details/:id',element:<OrderDetails/>}
       ]
     },
      {  path: "*", element: <Pagenotfound /> },

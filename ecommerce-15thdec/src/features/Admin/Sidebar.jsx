@@ -51,7 +51,7 @@ const Sidebar = ({openSidebarToggle,OpenSidebar}) => {
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
-                <Link className='link' to='/admin'>   <BiSolidShoppingBags className='icon'/> Orders</Link>
+                <Link className='link' to='/admin/orders'>   <BiSolidShoppingBags className='icon'/> Orders</Link>
                 </a>
             </li>
             <li className='sidebar-list-item'>

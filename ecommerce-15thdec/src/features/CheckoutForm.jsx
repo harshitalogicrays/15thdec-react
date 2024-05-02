@@ -5,8 +5,18 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
+import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserEmail, selectUserId, selectUserName } from "../redux/authSlice";
+import { EMPTY_CART, selectCartItems, selectTotalAmount } from "../redux/cartSlice";
+import { selectShippingAddress } from "../redux/checkoutSlice";
+import emailjs from '@emailjs/browser';
 
 export default function CheckoutForm() {
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
@@ -36,7 +46,8 @@ export default function CheckoutForm() {
       if(result.paymentIntent.status=='succeeded'){
         toast.success("payment done")
         setIsLoading(false)
-        //save order 
+        saveorder()//save order 
+
       }
     }
     })
@@ -45,6 +56,37 @@ export default function CheckoutForm() {
   };
 
   const paymentElementOptions = { layout: "tabs"}
+
+  let userId=useSelector(selectUserId)
+  let userEmail=useSelector(selectUserEmail)
+  let cartItems=useSelector(selectCartItems)
+  let totalAmount=useSelector(selectTotalAmount)
+  let shippingAddress=useSelector(selectShippingAddress)
+  let userName=useSelector(selectUserName)
+
+  let saveorder=async()=>{
+    let today=new Date()
+    try{
+      let orderConfig ={userId,userEmail,cartItems,totalAmount,shippingAddress,orderDate:today.toLocaleDateString(), OrderTime:today.toLocaleTimeString(),
+        orderStatus:"Placed",createdAt:Timestamp.now().toMillis()}
+
+      const docRef=collection(db,"orders")
+      await addDoc(docRef,orderConfig)
+
+        //mail 
+        emailjs.send('service_esvohar', 'template_bh29ved', {email:userEmail,name:userName,status:orderConfig.orderStatus,amount:totalAmount}, {
+          publicKey: 'ouyyULNr1Fl9QYxiJ',
+        })
+        .then( () => {
+            dispatch(EMPTY_CART())
+            toast.success("order placed")
+            navigate('/')  },
+          (error) => { toast.error(error.message)  }, );
+    }
+    catch(error){
+      toast.error(error.message)
+    }
+  }
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>

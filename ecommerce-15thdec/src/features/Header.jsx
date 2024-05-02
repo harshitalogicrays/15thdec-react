@@ -110,6 +110,7 @@ useEffect(()=>{
                   <Nav.Link as={Link} to='/register'><FaPenAlt/> Register</Nav.Link>
             </ShowOnLogout>
             <ShowOnLogin>
+            <Nav.Link as={Link} to='/myorders'>My Orders</Nav.Link>
                 <Nav.Link as={Link} to='/'>Welcome {username}</Nav.Link>
                 <Nav.Link><Logout/></Nav.Link>
             </ShowOnLogin>

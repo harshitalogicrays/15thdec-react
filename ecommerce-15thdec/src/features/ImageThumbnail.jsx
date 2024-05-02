@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
-
+import ImageMaginifier from './ImageMaginifier'
+import './ImageMaginifier.css'
 const ImageThumbnail = ({images}) => {
     let [image,setImage]=useState(images[0])
     let [index,setIndex]=useState(0)
@@ -22,8 +23,9 @@ const ImageThumbnail = ({images}) => {
     }
   return (
     <>
-        <img src={image} width={500} height={300} className='mb-3'/><br/>
-        <button
+        {/* <img src={image} width={500} height={300} className='mb-3'/><br/> */}
+        <ImageMaginifier imgUrl={image}/> 
+               <button
             type="button"
             class="btn btn-secondary"  onClick={()=>handlePrev(index)}
         >
